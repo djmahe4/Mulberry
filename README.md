@@ -33,6 +33,9 @@ streamlit run mulberry_audio.py
 
 The application will open in your default web browser at `http://localhost:8501`.
 
+## Screenshot
+![screenshot.png][examples/screenshot.png)
+
 ## How It Works
 
 ### Audio Architecture
