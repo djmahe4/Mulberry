@@ -291,8 +291,8 @@ audio_component_html = f"""
             // SUSTAIN: Hold at sustain level (implicit - just wait)
             // The sustain value is maintained automatically
             
-            // RELEASE: Ramp down to silence after note duration
-            gainNode.gain.linearRampToValueAtTime(sustain, now + noteDuration);
+            // RELEASE: Start ramp down to silence after note duration
+            gainNode.gain.setValueAtTime(sustain, now + noteDuration);
             gainNode.gain.linearRampToValueAtTime(0, now + noteDuration + release);
             
             // Start the oscillator
@@ -302,7 +302,7 @@ audio_component_html = f"""
             oscillator.stop(now + noteDuration + release);
             
             // Show status
-            showStatus(`Playing {{frequency}}Hz {{waveform}} tone with ADSR envelope`);
+            showStatus(`Playing {frequency}Hz {waveform} tone with ADSR envelope`);
             
             // Hide status after sound completes
             setTimeout(() => {{
@@ -383,7 +383,11 @@ audio_component_html = f"""
             oscillator.stop(now + duration);
             
             // Update status with current note
-            updateStatus(`Playing {{noteName}} ({{freq.toFixed(2)}}Hz)`);
+            const timeUntilNoteStart = (startTime - audioContext.currentTime) * 1000;
+            
+            setTimeout(() => {{
+                updateStatus(`Playing ${{noteName}} (${{freq.toFixed(2)}}Hz)`);
+            }}, timeUntilNoteStart > 0 ? timeUntilNoteStart : 0);
         }}
 
         /**
