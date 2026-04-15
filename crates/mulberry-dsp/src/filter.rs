@@ -47,7 +47,7 @@ impl BiquadFilter {
     ///
     /// * `filter_type` – the filter shape.
     /// * `frequency`   – cutoff or centre frequency in Hz.
-    /// * `q`           – quality factor (default `0.707` ≈ Butterworth).
+    /// * `q`           – quality factor (`0.707` ≈ Butterworth is a common choice).
     /// * `sample_rate` – output sample rate in Hz.
     pub fn new(filter_type: FilterType, frequency: f32, q: f32, sample_rate: f32) -> Self {
         let mut f = Self {

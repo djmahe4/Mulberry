@@ -44,13 +44,17 @@ impl Oscillator {
     /// * `frequency`   – oscillation frequency in Hz.
     /// * `sample_rate` – output sample rate in Hz.
     pub fn new(waveform: Waveform, frequency: f32, sample_rate: f32) -> Self {
+        // Derive a seed from the frequency and sample-rate so that distinct
+        // oscillator configurations produce different noise sequences.
+        let seed = ((frequency as u32).wrapping_mul(2654435761))
+            ^ ((sample_rate as u32).wrapping_mul(2246822519));
         Self {
             waveform,
             frequency,
             phase: 0.0,
             sample_rate,
             amplitude: 1.0,
-            noise_state: 12345,
+            noise_state: seed | 1, // ensure non-zero seed
         }
     }
 
