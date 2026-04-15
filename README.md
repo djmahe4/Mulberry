@@ -1,108 +1,158 @@
-# Mulberry Web-Music IDE 🎵
+# 🎵 Mulberry — Next-Gen Native DAW
 
-A browser-based music interaction environment built with Streamlit and Web Audio API for real-time sound synthesis.
+Mulberry is a **production-grade, native desktop DAW + live-coding environment** built entirely in Rust.
 
-## Features
+> **Legacy notice:** The original Python/Streamlit web app (`mulberry_audio.py`) has been superseded.  
+> See [`docs/programming-guide.md`](docs/programming-guide.md) for the migration guide.
 
-- **Real-time tone generation** using Web Audio API oscillator nodes
-- **ADSR envelope control** (Attack, Decay, Sustain, Release) for shaping sound
-- **Multiple waveform types**: sine, square, sawtooth, triangle
-- **Interactive controls**: frequency slider, waveform selector
-- **C-Major scale demo** to demonstrate musical sequencing
-- **Educational comments** explaining Web Audio API concepts for learners
+---
 
-## Installation
+## ✨ Features
 
-1. Clone the repository:
+| Category | Feature |
+|---|---|
+| 🎧 **Audio Engine** | Real-time audio via [cpal](https://github.com/RustAudio/cpal); lock-free callback |
+| 🎼 **Live Coding** | Strudel/TidalCycles-style mini-notation: `"c4 [e4 g4] ~ c5"` |
+| 🥁 **Drum Machine** | 16-step × 8-track sequencer with velocity and accent |
+| 🎸 **Synth Bass** | Monophonic bass synth (osc + ADSR + filter + tanh distortion) |
+| 🔌 **Plugins** | EQ (8-band), Compressor, Reverb, Delay, Drum Enhancer, Bass Enhancer |
+| 🤖 **AI Agents** | Generator, Editor, Harmony, Debug agents via `tokio::task::JoinSet` |
+| 🗣️ **TTS** | Formant synthesizer (zero-dependency) + espeak-ng subprocess backend |
+| 🖥️ **UI** | Tauri-compatible state model; tracks/drums/code editor/piano roll/mixer |
+| 🔧 **Plugin SDK** | Dynamic library loading for third-party plugins |
+
+---
+
+## 📦 Workspace Structure
+
+```
+Mulberry/
+├── Cargo.toml                  # Workspace root
+├── crates/
+│   ├── mulberry-core/          # Core types, EventBus, time, config, errors
+│   ├── mulberry-audio/         # cpal real-time audio engine + voices + graph
+│   ├── mulberry-plugins/       # Built-in DSP plugins + drum machine + synth bass
+│   ├── mulberry-ui/            # UI state model (Tauri-compatible)
+│   ├── mulberry-dsp/           # Oscillators, filters, ADSR envelopes, mixer
+│   ├── mulberry-transport/     # DAW transport, timeline, metronome
+│   ├── mulberry-livecode/      # Live-code lexer → parser → pattern engine
+│   ├── mulberry-agent/         # AI agent orchestration (JoinSet)
+│   ├── mulberry-tts/           # TTS synthesis (formant + subprocess)
+│   ├── mulberry-plugin-sdk/    # Dynamic plugin loader + HostApi trait
+│   └── mulberry-app/           # Binary entry point
+└── docs/
+    ├── programming-guide.md    # Architecture, async patterns, plugin dev
+    └── music-theory-guide.md   # Fundamentals through production
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
 ```bash
-git clone https://github.com/djmahe4/Mulberry.git
+# Linux (ALSA)
+sudo apt install libasound2-dev pkg-config
+
+# macOS (CoreAudio — no extra steps needed)
+
+# Windows (WASAPI — no extra steps needed)
+```
+
+### Build
+
+```bash
+git clone https://github.com/djmahe4/Mulberry
 cd Mulberry
+cargo build --release
 ```
 
-2. Install dependencies:
+### Run
+
 ```bash
-pip install -r requirements.txt
+cargo run --release --bin mulberry
 ```
 
-## Usage
+---
 
-Run the Streamlit application:
-```bash
-streamlit run mulberry_audio.py
+## 🎹 Live-Coding Pattern Syntax
+
+```text
+"c4 e4 g4 c5"        -- sequence (4 notes per cycle)
+"c4 [e4 g4]"         -- subdivision (e4+g4 share one slot)
+"c4 ~ e4 ~"          -- rests (~ = silence)
+"c4*3 e4"            -- repeat c4 three times
+"c4 e4 g4" | fast 2  -- double speed
+"c4 e4 g4" | slow 2  -- half speed
+"c4 e4 g4" | rev     -- reverse pattern
 ```
 
-The application will open in your default web browser at `http://localhost:8501`.
+---
 
-## Screenshot
-![screenshot.png](examples/screenshot.png)
+## 🧵 Async Concurrency Model
 
-## How It Works
+| Context | Pattern | Reason |
+|---|---|---|
+| Main event loop | `tokio::select!` | Multiplex bus + signals |
+| Agent LLM calls | `JoinSet` | Structured, abortable tasks |
+| Real-time event streams | `FuturesUnordered` | No `'static` requirement |
+| Audio callback | Lock-free channels + `try_lock` | Real-time safety |
+| UI shared state | `Arc<RwLock<T>>` | Many readers, safe writes |
 
-### Audio Architecture
+---
 
-The application follows this audio processing chain:
+## 🔌 Plugin API
+
+```rust
+pub trait Plugin: Send {
+    /// Process a mono block in-place.
+    /// REALTIME SAFE: no allocation, no locks
+    fn process_block(&mut self, input: &[f32], output: &mut [f32]);
+
+    fn info(&self) -> PluginInfo;
+    fn parameters(&self) -> Vec<PluginParameter>;
+    fn set_parameter(&mut self, id: &str, value: f32);
+    fn get_parameter(&self, id: &str) -> Option<f32>;
+    fn set_sample_rate(&mut self, sample_rate: f32);
+    fn reset(&mut self);
+}
+```
+
+Built-in plugins: **EQ** (8-band) · **Compressor** · **Reverb** · **Delay** · **Drum Enhancer** · **Bass Enhancer**
+
+---
+
+## 📚 Documentation
+
+- [`docs/programming-guide.md`](docs/programming-guide.md) — Architecture, DSP safety, plugin dev
+- [`docs/music-theory-guide.md`](docs/music-theory-guide.md) — Music theory from basics to production
+
+---
+
+## 🏗️ Architecture Overview
 
 ```
-Browser → Streamlit UI → Web Audio JS → AudioContext → Oscillator → Gain → Speakers
+                         EventBus (crossbeam broadcast)
+                                │
+          ┌─────────────────────┼──────────────────────┐
+          ▼                     ▼                       ▼
+    Transport             LiveCode Engine         Agent Orchestrator
+    (play/stop/BPM)       (pattern parser)        (JoinSet, LLM calls)
+          │                     │                       │
+          └──────────┬──────────┘                       │
+                     ▼                                   │
+              Audio Engine (cpal)                        │
+              ┌──────┴──────┐                           │
+             Voices     Plugin Chain                     │
+              │         (EQ→Comp→Reverb…)               │
+              └──────┬──────┘                           │
+                     ▼                                   ▼
+                DAC (speakers)                    UI State (Arc<RwLock>)
 ```
 
-### Key Components
-
-1. **AudioContext**: The browser's audio processing engine that manages all sound generation
-2. **OscillatorNode**: Generates raw waveforms at specific frequencies
-3. **GainNode**: Controls volume and implements ADSR envelopes
-4. **Audio Graph**: Nodes are connected to form a processing pipeline
-
-### ADSR Envelope
-
-The ADSR envelope shapes how the sound evolves over time:
-
-- **Attack**: Time for sound to reach full volume
-- **Decay**: Time for sound to drop to sustain level
-- **Sustain**: Volume level maintained while note is held
-- **Release**: Time for sound to fade to silence after note ends
-
-## Controls
-
-### Sidebar Controls
-
-- **Frequency Slider** (200-800 Hz): Adjust the pitch of the generated tone
-- **Waveform Selector**: Choose between sine, square, sawtooth, or triangle waves
-- **Attack** (0.01-2.0s): Control the attack phase of the envelope
-- **Decay** (0.01-2.0s): Control the decay phase of the envelope
-- **Sustain** (0.0-1.0): Set the sustain level
-- **Release** (0.01-3.0s): Control the release phase of the envelope
-
-### Action Buttons
-
-- **Play Tone**: Generate a single tone with your current settings
-- **Play C-Major Scale**: Play a C-Major scale (C, D, E, F, G, A, B, C) as a demo
-
-## Technical Details
-
-- **No pre-rendered audio**: All sounds are generated in real-time
-- **Browser-based**: Runs entirely in the browser using Web Audio API
-- **Audio unlock**: Respects browser autoplay policies (requires user gesture)
-- **Precise timing**: Uses AudioContext's high-precision clock for scheduling
-
-## Learning Resources
-
-The code includes extensive comments explaining:
-- How Web Audio API works
-- Audio graph node connections
-- ADSR envelope implementation
-- Musical note frequency calculations
-- Best practices for Web Audio programming
-
-## Browser Compatibility
-
-This application works in modern browsers that support:
-- Web Audio API
-- ES6 JavaScript
-- HTML5
-
-Tested on: Chrome, Firefox, Safari, Edge
+---
 
 ## License
 
-See LICENSE file for details.
+See [LICENSE](LICENSE) for details.

@@ -18,6 +18,8 @@ mulberry-livecode = { workspace = true }
 mulberry-agent = { workspace = true }
 mulberry-tts = { workspace = true }
 mulberry-plugin-sdk = { workspace = true }
+mulberry-plugins = { workspace = true }
+mulberry-ui = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }

@@ -64,3 +64,4 @@ mulberry-agent = { path = "crates/mulberry-agent" }
 mulberry-tts = { path = "crates/mulberry-tts" }
 mulberry-plugin-sdk = { path = "crates/mulberry-plugin-sdk" }
 mulberry-plugins = { path = "crates/mulberry-plugins" }
+mulberry-ui = { path = "crates/mulberry-ui" }
