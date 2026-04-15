@@ -1,0 +1,19 @@
+[package]
+name = "mulberry-ui"
+description = "Tauri-based desktop UI for the Mulberry DAW"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+mulberry-core = { workspace = true }
+mulberry-audio = { workspace = true }
+mulberry-transport = { workspace = true }
+mulberry-livecode = { workspace = true }
+mulberry-agent = { workspace = true }
+mulberry-plugins = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }

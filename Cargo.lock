@@ -1033,6 +1033,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "mulberry-plugins"
+version = "0.1.0"
+dependencies = [
+ "mulberry-core",
+ "mulberry-dsp",
+ "serde",
+ "thiserror 2.0.18",
+ "tracing",
+]
+
+[[package]]
 name = "mulberry-transport"
 version = "0.1.0"
 dependencies = [
@@ -1050,6 +1061,23 @@ version = "0.1.0"
 dependencies = [
  "mulberry-core",
  "serde",
+ "thiserror 2.0.18",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "mulberry-ui"
+version = "0.1.0"
+dependencies = [
+ "mulberry-agent",
+ "mulberry-audio",
+ "mulberry-core",
+ "mulberry-livecode",
+ "mulberry-plugins",
+ "mulberry-transport",
+ "serde",
+ "serde_json",
  "thiserror 2.0.18",
  "tokio",
  "tracing",

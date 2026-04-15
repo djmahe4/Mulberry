@@ -1,9 +1,13 @@
 [workspace]
 resolver = "2"
 members = [
+    # ── Primary crates ──────────────────────────────────────────────────────
     "crates/mulberry-core",
-    "crates/mulberry-dsp",
     "crates/mulberry-audio",
+    "crates/mulberry-plugins",
+    "crates/mulberry-ui",
+    # ── Support crates ──────────────────────────────────────────────────────
+    "crates/mulberry-dsp",
     "crates/mulberry-transport",
     "crates/mulberry-livecode",
     "crates/mulberry-agent",
@@ -59,3 +63,4 @@ mulberry-livecode = { path = "crates/mulberry-livecode" }
 mulberry-agent = { path = "crates/mulberry-agent" }
 mulberry-tts = { path = "crates/mulberry-tts" }
 mulberry-plugin-sdk = { path = "crates/mulberry-plugin-sdk" }
+mulberry-plugins = { path = "crates/mulberry-plugins" }

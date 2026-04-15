@@ -90,6 +90,12 @@ pub enum Event {
         data: serde_json::Value,
     },
 
+    /// A drum hit from the drum machine.
+    DrumHit(crate::drums::DrumHit),
+
+    /// Drum machine state update.
+    DrumMachineState(crate::drums::DrumMachineState),
+
     /// A graceful shutdown request.
     Shutdown,
 }

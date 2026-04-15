@@ -10,12 +10,14 @@
 //! - Time and musical position representations
 
 pub mod config;
+pub mod drums;
 pub mod error;
 pub mod event;
 pub mod sample;
 pub mod time;
 
 pub use config::MulberryConfig;
+pub use drums::{DrumHit, DrumMachineState};
 pub use error::MulberryError;
 pub use event::{Event, EventBus};
 pub use sample::{AudioBuffer, AudioFrame, Sample};
