@@ -1,0 +1,16 @@
+[package]
+name = "mulberry-audio"
+description = "Real-time audio engine with cpal integration for Mulberry DAW"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+mulberry-core = { workspace = true }
+mulberry-dsp = { workspace = true }
+cpal = { workspace = true }
+ringbuf = { workspace = true }
+crossbeam-channel = { workspace = true }
+parking_lot = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }

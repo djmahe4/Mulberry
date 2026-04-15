@@ -1,0 +1,67 @@
+[workspace]
+resolver = "2"
+members = [
+    # ── Primary crates ──────────────────────────────────────────────────────
+    "crates/mulberry-core",
+    "crates/mulberry-audio",
+    "crates/mulberry-plugins",
+    "crates/mulberry-ui",
+    # ── Support crates ──────────────────────────────────────────────────────
+    "crates/mulberry-dsp",
+    "crates/mulberry-transport",
+    "crates/mulberry-livecode",
+    "crates/mulberry-agent",
+    "crates/mulberry-tts",
+    "crates/mulberry-plugin-sdk",
+    "crates/mulberry-app",
+]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+license = "MIT"
+repository = "https://github.com/djmahe4/Mulberry"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1.44", features = ["full"] }
+futures = "0.3"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Audio
+cpal = "0.15"
+ringbuf = "0.4"
+
+# Concurrency
+crossbeam-channel = "0.5"
+parking_lot = "0.12"
+
+# Networking / HTTP
+reqwest = { version = "0.12", features = ["json"] }
+
+# Observability
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Error handling
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Utilities
+uuid = { version = "1.16", features = ["v4"] }
+libloading = "0.8"
+
+# Internal crates
+mulberry-core = { path = "crates/mulberry-core" }
+mulberry-dsp = { path = "crates/mulberry-dsp" }
+mulberry-audio = { path = "crates/mulberry-audio" }
+mulberry-transport = { path = "crates/mulberry-transport" }
+mulberry-livecode = { path = "crates/mulberry-livecode" }
+mulberry-agent = { path = "crates/mulberry-agent" }
+mulberry-tts = { path = "crates/mulberry-tts" }
+mulberry-plugin-sdk = { path = "crates/mulberry-plugin-sdk" }
+mulberry-plugins = { path = "crates/mulberry-plugins" }
+mulberry-ui = { path = "crates/mulberry-ui" }

@@ -1,0 +1,13 @@
+[package]
+name = "mulberry-tts"
+description = "Free TTS vocal synthesis pipeline for Mulberry DAW"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+mulberry-core = { workspace = true }
+tokio = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
