@@ -1,0 +1,13 @@
+[package]
+name = "mulberry-plugin-sdk"
+description = "Plugin SDK with dynamic loading for Mulberry DAW"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+mulberry-core = { workspace = true }
+libloading = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }

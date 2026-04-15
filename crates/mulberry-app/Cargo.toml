@@ -1,0 +1,24 @@
+[package]
+name = "mulberry-app"
+description = "Main application entry point for Mulberry DAW"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "mulberry"
+path = "src/main.rs"
+
+[dependencies]
+mulberry-core = { workspace = true }
+mulberry-dsp = { workspace = true }
+mulberry-audio = { workspace = true }
+mulberry-transport = { workspace = true }
+mulberry-livecode = { workspace = true }
+mulberry-agent = { workspace = true }
+mulberry-tts = { workspace = true }
+mulberry-plugin-sdk = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }

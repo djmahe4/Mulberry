@@ -1,0 +1,12 @@
+[package]
+name = "mulberry-dsp"
+description = "DSP primitives: oscillators, filters, and ADSR envelopes for Mulberry DAW"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+mulberry-core = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }

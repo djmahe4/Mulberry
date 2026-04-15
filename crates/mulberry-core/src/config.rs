@@ -1,7 +1,7 @@
 //! Configuration types for the Mulberry DAW.
 //!
 //! [`MulberryConfig`] aggregates all top-level settings that control how the
-//! various subsystems are initialised.
+//! various subsystems are initialized.
 
 use serde::{Deserialize, Serialize};
 

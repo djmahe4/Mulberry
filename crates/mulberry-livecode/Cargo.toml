@@ -1,0 +1,14 @@
+[package]
+name = "mulberry-livecode"
+description = "Strudel/TidalCycles-style live coding pattern engine for Mulberry DAW"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+mulberry-core = { workspace = true }
+mulberry-dsp = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }

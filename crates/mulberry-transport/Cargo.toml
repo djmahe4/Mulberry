@@ -1,0 +1,14 @@
+[package]
+name = "mulberry-transport"
+description = "DAW transport: play/stop/seek/BPM/timeline for Mulberry DAW"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+mulberry-core = { workspace = true }
+crossbeam-channel = { workspace = true }
+parking_lot = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
